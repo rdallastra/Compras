@@ -1,0 +1,113 @@
+body {
+  background-color: black;
+  font-family: Helvetica;
+}
+
+.wrapper {
+  width: 600px;
+  margin: 0 auto;
+  background-color: brown;
+  display: block;
+}
+
+/* Nav bar */
+
+nav {
+  z-index: 10;
+  height: 30px;
+  width: inherit;
+  padding: 10px 0px 9px 0px;
+  border-bottom: 1px solid seashell;
+  position: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: teal;
+}
+
+nav h2 {
+  margin: 0 10px;
+  clear: left;
+  color: white;
+  font-size: 20px;
+}
+
+nav ul {
+  clear: right;
+  list-style-type: none;
+  padding: 0;
+  overflow: hidden;
+}
+
+nav li {
+  float: left;
+  margin: 0px 10px;
+  color: white;
+  font-size: 20px;
+/*  text-decoration: underline;*/
+}
+
+/* Main display area */
+
+main {
+  display: flex;
+}
+
+.spacer {
+  height: 50px;
+}
+
+.group-container {
+  width: 50%;
+  height: 600px;
+  display: flex;
+  flex-direction: column;
+  overflow: scroll;
+}
+
+.group {
+
+}
+
+.cell {
+  min-height: 50px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.cell .hover {
+  opacity: 0.7;
+}
+
+.cell h3 {
+  margin: 0 1rem;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.limp {
+  background-color: Plum;
+}
+
+.frut {
+  background-color: LightSalmon;
+}
+
+.mass {
+  background-color: PaleGreen;
+}
+
+.frio {
+  background-color: Aqua;
+}
+
+.item-container {
+  width: 50%;
+  height: 600px;
+  overflow: scroll;
+}
+
+.item {
+
+}

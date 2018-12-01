@@ -57,16 +57,12 @@ main {
   height: 50px;
 }
 
-.group-container {
+.column-container {
   width: 50%;
-  height: 600px;
+/*  height: 600px;*/
   display: flex;
   flex-direction: column;
-  overflow: scroll;
-}
-
-.group {
-
+/*  overflow: scroll;*/
 }
 
 .cell {
@@ -84,28 +80,6 @@ main {
   margin: 0 1rem;
   font-size: 1.5rem;
   font-weight: bold;
-}
-
-.limp {
-  background-color: Plum;
-}
-
-.frut {
-  background-color: LightSalmon;
-}
-
-.mass {
-  background-color: PaleGreen;
-}
-
-.frio {
-  background-color: Aqua;
-}
-
-.item-container {
-  width: 50%;
-  height: 600px;
-  overflow: scroll;
 }
 
 .item {

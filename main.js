@@ -1,8 +1,7 @@
-/* global $ */
-
 const produtos = [
   { cor: 'Plum',
     nome: 'Limpeza',
+    id: 'Limpeza',
     items: ['Omo',
       'Veja',
       'Vanish',
@@ -12,6 +11,7 @@ const produtos = [
       'Álcool'] },
   { cor: 'LightSalmon',
     nome: 'Frutas e Verduras',
+    id: 'Frutas_e_Verduras',
     items: ['Cebola',
       'Tomate',
       'Aspargos',
@@ -23,6 +23,7 @@ const produtos = [
       'Abacate'] },
   { cor: 'PaleGreen',
     nome: 'Massas e Cereais',
+    id: 'Massas_e_Cereais',
     items: ['Arroz',
       'Kome',
       'Macarrão',
@@ -31,6 +32,7 @@ const produtos = [
       'Massa de Tomate'] },
   { cor: 'Aqua',
     nome: 'Frios e Congelados',
+    id: 'Frios_e_Congelados',
     items: ['Presunto',
       'Peito de Peru',
       'Mussarela',
@@ -43,13 +45,24 @@ const produtos = [
       'Suco de Uva'] }
 ];
 
-//  $('.group-container').append('<div class="group cell limp"></div>');
-//  produtos.forEach(grupo => {
-for (let i = 0; i < produtos.length; i++) {
-  let grupo = produtos[i];
-  $('.group-container').append('<div class="group cell" id="' + grupo.nome +
-                                '"></div>');
-  console.log('ready: ' + grupo.nome);
-  $('#' + grupo.nome).append('<h3>' + grupo.nome + '</h3>');
-  $('#' + grupo.nome).css('background-color', grupo.cor);
-}
+/* variable used to store text to append as html */
+let htmlToAppend = '';
+const $groups = $('.groups');
+const $items = $('.items');
+
+/* Build the groups according to the json informed */
+produtos.forEach(grupo => {
+  htmlToAppend = '<div class="group cell" id="' + grupo.id + '">';
+  htmlToAppend += '<h3>' + grupo.nome + '</h3></div>';
+  $groups.append(htmlToAppend);
+  /* add the style id background color rule for each group */
+  $('html > head').append('<style>#' + grupo.id +
+    ' { background-color: ' + grupo.cor + ' }');
+  grupo.items.forEach(item => {
+    htmlToAppend = '<div class="item cell" id="' + grupo.id + '">';
+    htmlToAppend += '<h3>' + item + '</h3></div>';
+    $items.append(htmlToAppend);
+  });
+});
+
+$('.item').hide();

@@ -52,17 +52,43 @@ const $items = $('.items');
 
 /* Build the groups according to the json informed */
 produtos.forEach(grupo => {
-  htmlToAppend = '<div class="group cell" id="' + grupo.id + '">';
+  /* Insert groups on the first column */
+  htmlToAppend = '<div class="group cell ' + grupo.id + '" id="' + grupo.id + '">';
   htmlToAppend += '<h3>' + grupo.nome + '</h3></div>';
   $groups.append(htmlToAppend);
-  /* add the style id background color rule for each group */
-  $('html > head').append('<style>#' + grupo.id +
+
+  /* Add the style id background color rule for each group */
+  $('html > head').append('<style>.' + grupo.id +
     ' { background-color: ' + grupo.cor + ' }');
+
+  /* Insert items for each group in the other column */
+  htmlToAppend = '<div class="items ' + grupo.id + '">';
   grupo.items.forEach(item => {
-    htmlToAppend = '<div class="item cell" id="' + grupo.id + '">';
+    htmlToAppend += '<div class="item cell">';
     htmlToAppend += '<h3>' + item + '</h3></div>';
-    $items.append(htmlToAppend);
+    // SVG to make sure the text does not reach more than 80% of the cell max width, with no wrap
+/*    htmlToAppend += '<svg viewBox="0 0 240 40">' +
+      '<text x="0" y="1.5rem" fill="black"><tspan class="itemText" textLength="' +
+      ($items.width * 0.8) + '">' + item + '</tspan></svg></div>';*/
   });
+  htmlToAppend += '</div>';
+  $items.append(htmlToAppend);
 });
 
-$('.item').hide();
+// Show only the first category
+$items.children().first().siblings().hide();
+
+$('.group').on('click', event => {
+  // console.log(event.target.id);
+  let $selectedGroup = $('.items.' + event.target.id);
+  $selectedGroup.siblings().hide();
+  $selectedGroup.show();
+});
+
+$('.item').on('mouseenter', event => {
+
+});
+
+$('.item').on('mouseleave', event => {
+
+});

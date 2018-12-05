@@ -1,10 +1,11 @@
 body {
   background-color: black;
   font-family: Helvetica;
+  /*opacity: 0.7;*/
 }
 
 .wrapper {
-  width: 600px;
+  width: 960px;
   margin: 0 auto;
   background-color: brown;
   display: block;
@@ -65,8 +66,15 @@ main {
 /*  overflow: scroll;*/
 }
 
+.group {
+  opacity: 1;
+}
+
+.group:hover {
+  opacity: 0.8;
+}
 .cell {
-  height: 50px;
+  min-height: 50px;
   display: flex;
   align-items: center;
   flex-wrap: wrap;
@@ -76,6 +84,31 @@ main {
   margin: 0 1rem;
   font-size: 1.5rem;
   font-weight: bold;
+}
+
+/* to be changed for mobile */
+.item {
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.item h3 {
+  margin: 0px;
+  max-width: 80%;
+}
+
+.item .quantity {
+  width: 20%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.plus, .minus {
+  border: 1px solid white;
+  padding: 0.25rem;
+  font-size: 1.2rem;
 }
 
 /*

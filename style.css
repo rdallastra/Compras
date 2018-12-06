@@ -78,6 +78,7 @@ main {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
+  cursor: default;
 }
 
 .cell h3 {
@@ -105,12 +106,15 @@ main {
   justify-content: space-between;
 }
 
-.plus, .minus {
-  border: 1px solid white;
+.plus, .minus, .current {
   padding: 0.25rem;
-  font-size: 1.2rem;
+  font-size: 1.5rem;
+  user-select: none;
 }
 
+.plus:hover, .minus:hover {
+  background-color: lightGrey;
+}
 /*
 svg {
   margin: 0 0.5rem;

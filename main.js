@@ -1,49 +1,60 @@
-const produtos = [
-  { cor: 'Plum',
-    nome: 'Limpeza',
-    id: 'Limpeza',
+const products = [
+  { color: 'Plum',
+    name: 'Limpeza',
     items: ['Omo',
       'Veja',
       'Vanish',
       'Esponja',
-      'Saco de lixo',
+      'Saco_de_lixo',
       'Detergente',
       'Álcool'] },
-  { cor: 'LightSalmon',
-    nome: 'Frutas e Verduras',
-    id: 'Frutas_e_Verduras',
+  { color: 'LightSalmon',
+    name: 'Frutas_e_Verduras',
     items: ['Cebola',
       'Tomate',
       'Aspargos',
       'Alho',
       'Alface',
-      'Legumes p/ Sopa',
+      'Legumes_p/_Sopa',
       'Banana',
       'Maçã',
       'Abacate'] },
-  { cor: 'PaleGreen',
-    nome: 'Massas e Cereais',
-    id: 'Massas_e_Cereais',
+  { color: 'PaleGreen',
+    name: 'Massas_e_Cereais',
     items: ['Arroz',
       'Kome',
       'Macarrão',
-      'Farinha de Trigo',
+      'Farinha_de_Trigo',
       'Tofu',
-      'Massa de Tomate'] },
-  { cor: 'Aqua',
-    nome: 'Frios e Congelados',
-    id: 'Frios_e_Congelados',
+      'Massa_de_Tomate'] },
+  { color: 'Aqua',
+    name: 'Frios_e_Congelados',
     items: ['Presunto',
-      'Peito de Peru',
+      'Peito_de_Peru',
       'Mussarela',
       'Waffle',
       'Pizza',
-      'Massa de Pizza',
+      'Massa_de_Pizza',
       'Iogurte',
       'Actimel',
-      'Suco de Laranja',
-      'Suco de Uva'] }
+      'Suco_de_Laranja',
+      'Suco_de_Uva'] }
 ];
+
+/*  This is an implementation of visibility functions, to hide elements
+    while preserve space arrangement */
+(function ($) {
+  $.fn.invisible = function () {
+    return this.each(function () {
+      $(this).css('visibility', 'hidden');
+    });
+  };
+  $.fn.visible = function () {
+    return this.each(function () {
+      $(this).css('visibility', 'visible');
+    });
+  };
+}(jQuery));
 
 /* variable used to store text to append as html */
 let htmlToAppend = '';
@@ -52,37 +63,36 @@ const $items = $('.items');
 let selection = {};
 
 /* Build the groups according to the json informed */
-produtos.forEach(grupo => {
-  const groupId = grupo.nome.replace(/ /g, '');
+products.forEach(group => {
   /* Insert groups on the first column */
   /* Template:
   <div class="group cell grupo_id" id="grupo_id">
-    <h3>grupo_nome</h3>
+    <h3>group_name</h3>
   </div> */
-  htmlToAppend = '<div class="group cell ' + groupId +
-    '" id="' + groupId + '">';
-  htmlToAppend += '<h3>' + grupo.nome + '</h3></div>';
+  htmlToAppend = '<div class="group cell ' + group.name +
+    '" id="' + group.name + '">';
+  htmlToAppend += '<h3>' + group.name.replace(/_/g, ' ') + '</h3></div>';
   $groups.append(htmlToAppend);
 
   /* Add the style id background color rule for each group */
-  $('html > head').append('<style>.' + groupId +
-    ' { background-color: ' + grupo.cor + ' }');
+  $('html > head').append('<style>.' + group.name +
+    ' { background-color: ' + group.color + ' }');
 
   /* Insert items for each group in the other column */
-  htmlToAppend = '<div class="items ' + groupId + '">';
-  grupo.items.forEach(item => {
+  htmlToAppend = '<div class="items ' + group.name + '">';
+  group.items.forEach(item => {
     /* Template:
     <div class="item cell">
       <h3>item</h3>
-      <div class="quantity">
+      <div class="quantity" id="item with no spaces">
         <h4 class="plus">+</h4>
         <h4 class="current"></h4>
         <h4 class="minus">-</h4>
       </div>
     </div> */
     htmlToAppend += '<div class="item cell">';
-    htmlToAppend += '<h3>' + item + '</h3>';
-    htmlToAppend += '<div class="quantity" id="' + item.replace(/ /g, '') +
+    htmlToAppend += '<h3>' + item.replace(/_/g, ' ') + '</h3>';
+    htmlToAppend += '<div class="quantity" id="' + item +
                     '"><h4 class="plus">+</h4><h4 class="current"></h4>' +
                     '<h4 class="minus">-</h4></div></div>';
     // SVG to make sure the text does not go more than 80% of the cell max width, with no wrap
@@ -98,7 +108,7 @@ produtos.forEach(grupo => {
 $items.children().first().siblings().hide();
 
 // Hide quantity buttons
-$('.quantity').hide();
+$('.quantity').children('.plus, .minus').invisible();
 
 // Show the selected group
 $('.group').on('click', event => {
@@ -109,11 +119,13 @@ $('.group').on('click', event => {
 
 // Show set quantity buttons on hover
 $('.item').on('mouseenter', event => {
-  $(event.currentTarget).children('.quantity').show();
+  const $quantity = $(event.currentTarget).children('.quantity');
+  $quantity.children('.plus, .minus').visible();
 });
 
 $('.item').on('mouseleave', event => {
-  $(event.currentTarget).children('.quantity').hide();
+  const $quantity = $(event.currentTarget).children('.quantity');
+  $quantity.children('.plus, .minus').invisible();
 });
 
 $('.plus').on('click', event => {
@@ -122,6 +134,21 @@ $('.plus').on('click', event => {
     selection[itemId]++;
   } else {
     selection[itemId] = 1;
+  }
+  $(event.currentTarget).next().text(selection[itemId]);
+  console.log(itemId + ': ' + selection[itemId]);
+});
+
+$('.minus').on('click', event => {
+  const itemId = $(event.currentTarget).parent().attr('id');
+  if (selection[itemId]) {
+    if (selection[itemId] === 1) {
+      delete selection[itemId];
+      $(event.currentTarget).prev().text('');
+    } else {
+      selection[itemId]--;
+      $(event.currentTarget).prev().text(selection[itemId]);
+    }
   }
   console.log(itemId + ': ' + selection[itemId]);
 });

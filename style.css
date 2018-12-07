@@ -5,7 +5,7 @@ body {
 }
 
 .wrapper {
-  width: 600px;
+  width: 480px;
   margin: 0 auto;
   background-color: brown;
   display: block;
@@ -24,6 +24,8 @@ nav {
   align-items: center;
   justify-content: space-between;
   background-color: teal;
+  cursor: default;
+  user-select: none;
 }
 
 nav h2 {
@@ -45,9 +47,15 @@ nav li {
   margin: 0px 10px;
   color: white;
   font-size: 20px;
-
 }
 
+.nav-button:hover {
+  opacity: 0.8;
+}
+
+#back-button {
+  display: none;
+}
 /* Main display area */
 
 main {
@@ -79,6 +87,7 @@ main {
   align-items: center;
   flex-wrap: wrap;
   cursor: default;
+  user-select: none;
 }
 
 .cell h3 {

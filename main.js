@@ -42,7 +42,7 @@ const products = [
 ];
 
 /*  This is an implementation of visibility functions, to hide elements
-    while preserve space arrangement */
+    while preserving spatial arrangement */
 (function ($) {
   $.fn.invisible = function () {
     return this.each(function () {
@@ -62,6 +62,11 @@ const $groups = $('.groups');
 const $items = $('.items');
 // Object created to hold the current shopping list
 let selection = {};
+// activeScreen is 0 for groups, 1 for items, 2 for list
+let state = {
+  activeScreen: 0,
+  currentGroup: ''
+};
 
 /* Build the groups according to the json informed */
 products.forEach(group => {
@@ -70,17 +75,17 @@ products.forEach(group => {
   <div class="group cell group_name">
     <h3>group_name</h3>
   </div> */
-  htmlToAppend = '<div class="group cell ' + group.name +
-                  '" id="' + group.name + '">';
-  htmlToAppend += '<h3>' + group.name.replace(/_/g, ' ') + '</h3></div>';
+  htmlToAppend = `<div class="group cell ${group.name}" id="${group.name}">` +
+                    `<h3>${group.name.replace(/_/g, ' ')}</h3>` +
+                  `</div>`;
   $groups.append(htmlToAppend);
 
   /* Add the style id background color rule for each group */
-  $('html > head').append('<style>.' + group.name +
-    ' { background-color: ' + group.color + ' }');
+  $('html > head').append(`<style>.${group.name}
+  { background-color: ${group.color} }`);
 
   /* Insert items for each group in the other column */
-  htmlToAppend = '<div class="items ' + group.name + '">';
+  htmlToAppend = `<div class="items ${group.name}">`;
   group.items.forEach(item => {
     /* Template:
     <div class="item cell">
@@ -91,11 +96,14 @@ products.forEach(group => {
         <h4 class="minus">-</h4>
       </div>
     </div> */
-    htmlToAppend += '<div class="item cell">';
-    htmlToAppend += '<h3>' + item.replace(/_/g, ' ') + '</h3>';
-    htmlToAppend += '<div class="quantity" id="' + item +
-                    '"><h4 class="plus">+</h4><h4 class="current"></h4>' +
-                    '<h4 class="minus">-</h4></div></div>';
+    htmlToAppend += `<div class="item cell">` +
+                      `<h3>${item.replace(/_/g, ' ')}</h3>` +
+                      `<div class="quantity" id="${item}">` +
+                      `<h4 class="plus">+</h4>` +
+                      `<h4 class="current"></h4>` +
+                      `<h4 class="minus">-</h4>` +
+                      `</div>` +
+                    `</div>`;
     // SVG to make sure the text does not go more than 80% of the cell max width, with no wrap
     /* htmlToAppend += '<svg viewBox="0 0 240 40">' +
       '<text x="0" y="1.5rem" fill="black"><tspan class="itemText" textLength="' +
@@ -107,15 +115,34 @@ products.forEach(group => {
 
 // Show only the first category
 $items.children().first().siblings().hide();
+state.currentGroup = $groups.children().first().attr('id');
+$items.hide();
 
 // Hide quantity buttons
 $('.quantity').children('.plus, .minus').invisible();
 
 // Show the selected group
 $('.group').on('click', event => {
-  let $selectedGroup = $('.items.' + event.target.id);
-  $selectedGroup.siblings().hide();
-  $selectedGroup.show();
+  let $selectedGroup;
+
+  // Hide items div if user clicked for the second time on the same category
+  if ((state.activeScreen === 1) && (event.target.id === state.currentGroup)) {
+    $items.hide();
+    state.activeScreen = 0;
+  } else {
+    // If items were hidden, show
+    if (state.activeScreen === 0) {
+      $items.show();
+      state.activeScreen = 1;
+    }
+    // Change group shown if clicked on a different one from the shown
+    if (event.target.id !== state.currentGroup) {
+      $selectedGroup = $(`.items.${event.target.id}`);
+      $selectedGroup.siblings().hide();
+      $selectedGroup.show();
+      state.currentGroup = event.target.id;
+    }
+  }
 });
 
 // Show set quantity buttons on hover

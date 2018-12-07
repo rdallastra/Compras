@@ -60,17 +60,18 @@ const products = [
 let htmlToAppend = '';
 const $groups = $('.groups');
 const $items = $('.items');
+// Object created to hold the current shopping list
 let selection = {};
 
 /* Build the groups according to the json informed */
 products.forEach(group => {
   /* Insert groups on the first column */
   /* Template:
-  <div class="group cell grupo_id" id="grupo_id">
+  <div class="group cell group_name">
     <h3>group_name</h3>
   </div> */
   htmlToAppend = '<div class="group cell ' + group.name +
-    '" id="' + group.name + '">';
+                  '" id="' + group.name + '">';
   htmlToAppend += '<h3>' + group.name.replace(/_/g, ' ') + '</h3></div>';
   $groups.append(htmlToAppend);
 
@@ -84,7 +85,7 @@ products.forEach(group => {
     /* Template:
     <div class="item cell">
       <h3>item</h3>
-      <div class="quantity" id="item with no spaces">
+      <div class="quantity" id="item">
         <h4 class="plus">+</h4>
         <h4 class="current"></h4>
         <h4 class="minus">-</h4>
@@ -123,11 +124,13 @@ $('.item').on('mouseenter', event => {
   $quantity.children('.plus, .minus').visible();
 });
 
+// Hide quantity buttons on leave
 $('.item').on('mouseleave', event => {
   const $quantity = $(event.currentTarget).children('.quantity');
   $quantity.children('.plus, .minus').invisible();
 });
 
+// Increase item quantity in object selection
 $('.plus').on('click', event => {
   const itemId = $(event.currentTarget).parent().attr('id');
   if (selection[itemId]) {
@@ -139,6 +142,7 @@ $('.plus').on('click', event => {
   console.log(itemId + ': ' + selection[itemId]);
 });
 
+// Decrease item quantity in object selection
 $('.minus').on('click', event => {
   const itemId = $(event.currentTarget).parent().attr('id');
   if (selection[itemId]) {
@@ -151,4 +155,31 @@ $('.minus').on('click', event => {
     }
   }
   console.log(itemId + ': ' + selection[itemId]);
+});
+
+function makeList (selection) {
+//  let htmlToAppend = '';
+
+  htmlToAppend = `<!DOCTYPE html>
+  <html>
+  <head>
+    <meta charset="utf-8">
+    <title>Compras</title>
+    <link rel="stylesheet" type="text/css" href="reset.css" />
+    <link rel="stylesheet" type="text/css" href="style.css" />
+  </head>
+  <body>
+    <ul>`;
+  Object.keys(selection).forEach(key => {
+    htmlToAppend += `<li>${key}: ${selection[key]}</li>`;
+  });
+  htmlToAppend += `</ul></body></html>`;
+  console.log(htmlToAppend);
+  let listWindow = window.open();
+  listWindow.document.body.innerHTML = htmlToAppend;
+};
+
+// Build shopping list from selected $items
+$('#make-list').on('click', event => {
+  makeList(selection);
 });
